@@ -14,4 +14,5 @@ pip install -r requirement.txt
 python app.py # three variables are supported: ip_addr, port, debug
 ```
 
+After the server received the requests, it saves the files under the path `./submission/task_name/task_name-student_name-timestamp/`.
 
