@@ -3,13 +3,14 @@ Author: c0ldstudy
 2022-03-23 13:44:32
 """
 
-import flask
-from flask import Flask
+import flask, time, os
+from flask import Flask, request
 from os.path import join
 import argparse
 
+
 app = flask.Flask(__name__)
-app.config["DEBUG"] = False
+
 
 def server_run(IP_ADDR, PORT, DEBUG):
     print(IP_ADDR, PORT, DEBUG)
