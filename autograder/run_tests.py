@@ -14,11 +14,15 @@ if __name__ == '__main__':
     for member in meta_data:
         name += member['name'].replace(" ", "")
 
-    # task name needs to be updated
-    temp = {"task": "task_name", "student_name": str(name)}
+    # parameters that need to be updated
+    task_name = "task_name"
+    ip_addr = "127.0.0.1"
+    port = "5000"
+
+    temp = {"task": task_name, "student_name": str(name)}
     files = os.listdir('/autograder/submission/')
     # assume all the files are in the one folder
-    if len(files) == 1:
+    if (len(files) == 1) and (os.path.isdir(files[0])):
         second_files = os.listdir('/autograder/submission/'+files[0])
         paths = []
         for second_file in second_files:
@@ -32,21 +36,22 @@ if __name__ == '__main__':
             exit()
         paths.append(("submission_metadata.json", open('/autograder/submission_metadata.json', 'r')))
         # update the 127.0.0.1 to the real ip address
-        response = requests.post(url='http://127.0.0.1/save_files', files=paths, data=temp)
+        response = requests.post(url='http://'+ip_addr+'/save_files', files=paths, data=temp)
     # assume the all files are on the root path
-    if len(files) > 1:
+    # if len(files) > 1:
+    else:
         second_files = os.listdir('/autograder/submission/')
         paths = []
         for second_file in second_files:
             paths.append((second_file, open('/autograder/submission/'+second_file, mode="rb")))
-        if len(paths)<2:
+        if len(paths)<1:
             with open('/autograder/results/results.json', 'w') as f:
                 output = {"output": "ERROR! Please check the submission requirements!", "stdout_visibility": "visible"}
                 f.write(json.dumps(output))
             exit()
 
         paths.append(("submission_metadata.json", open('/autograder/submission_metadata.json', 'r')))
-        response = requests.post(url='http://127.0.0.1:443/save_files', files=paths, data=temp)
+        response = requests.post(url='http://'+ip_addr+':'+port+'/save_files', files=paths, data=temp)
 
 
     # set the score of the gradescope
